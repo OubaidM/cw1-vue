@@ -1,42 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>After-School Classes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font-Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="app">
-    <div class="container py-4">
-      <h1>After-School Lessons</h1>
+  <head>
+    <meta charset="utf-8" />
+    <title>After-School Classes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font-Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div class="container py-4">
+        <h1>After-School Lessons</h1>
+        <!-- sort bar -->
+        <div class="row mb-3">
+          <div class="col">
+            <label class="me-2"><strong>Sort by:</strong></label>
+            <div class="btn-group btn-group-sm" role="group">
+              <button
+                class="btn btn-outline-primary"
+                :class="{active: sortBy==='topic'}"
+                @click="setSort('topic')"
+              >
+                Subject
+              </button>
 
-      <!-- lesson list -->
-      <div class="row">
-        <div class="col-md-6 col-lg-4 mb-4" v-for="lesson in lessons" :key="lesson._id">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title"><i class="fa-solid fa-book"></i> {{ lesson.topic }}</h5>
-              <p class="card-text">
-                <small class="text-muted">
-                  <i class="fa-solid fa-location-dot"></i> {{ lesson.location }}<br>
-                  <i class="fa-solid fa-tag"></i> £{{ lesson.price }}<br>
-                  <i class="fa-solid fa-users"></i> Spaces: {{ lesson.space }}
-                </small>
-              </p>
+              <button
+                class="btn btn-outline-primary"
+                :class="{active: sortBy==='location'}"
+                @click="setSort('location')"
+              >
+                Location
+              </button>
+
+              <button
+                class="btn btn-outline-primary"
+                :class="{active: sortBy==='price'}"
+                @click="setSort('price')"
+              >
+                Price
+              </button>
+
+              <button
+                class="btn btn-outline-primary"
+                :class="{active: sortBy==='space'}"
+                @click="setSort('space')"
+              >
+                Spaces
+              </button>
+            </div>
+
+            <!-- asc / desc toggle -->
+            <button
+              class="btn btn-sm btn-outline-secondary ms-3"
+              @click="ascending = !ascending"
+            >
+              <i
+                :class="ascending ? 'fa-solid fa-arrow-up-wide-short' : 'fa-solid fa-arrow-down-short-wide'"
+              ></i>
+              {{ ascending ? 'Asc' : 'Desc' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- lesson list -->
+        <div class="row">
+          <div
+            class="col-md-6 col-lg-4 mb-4"
+            v-for="lesson in lessons"
+            :key="lesson._id"
+          >
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fa-solid fa-book"></i> {{ lesson.topic }}
+                </h5>
+                <p class="card-text">
+                  <small class="text-muted">
+                    <i class="fa-solid fa-location-dot"></i> {{ lesson.location
+                    }}<br />
+                    <i class="fa-solid fa-tag"></i> £{{ lesson.price }}<br />
+                    <i class="fa-solid fa-users"></i> Spaces: {{ lesson.space }}
+                  </small>
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Vue 3 -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <script src="app.js"></script>
-</body>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
