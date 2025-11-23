@@ -6,7 +6,8 @@ createApp({
       apiUrl: 'https://cw1-api.onrender.com',
       lessons: [],
       sortBy: 'topic',
-      ascending: true
+      ascending: true,
+      cart: []
     };
   },
   methods: {
@@ -21,8 +22,16 @@ createApp({
         if (this.ascending) return x > y ? 1 : -1;
         return x < y ? 1 : -1;
       });
-    }
-  },
+    },
+    addToCart(lesson) {
+    if (lesson.space <= 0) return;
+    // 1. decrease local copy immediately (UX)
+    lesson.space--;
+    // 2. push into cart
+    this.cart.push({ ...lesson });
+  }
+},
+
   async mounted() {
     const res = await fetch(`${this.apiUrl}/lessons`);
     this.lessons = await res.json();

@@ -20,6 +20,9 @@
     <div id="app">
       <div class="container py-4">
         <h1>After-School Lessons</h1>
+        <span class="badge bg-secondary ms-3">
+          <i class="fa-solid fa-shopping-cart"></i> {{ cart.length }}
+        </span>
         <!-- sort bar -->
         <div class="row mb-3">
           <div class="col">
@@ -79,7 +82,7 @@
             :key="lesson._id"
           >
             <div class="card h-100">
-              <div class="card-body">
+              <div class="card-body d-flex flex-column">
                 <h5 class="card-title">
                   <i class="fa-solid fa-book"></i> {{ lesson.topic }}
                 </h5>
@@ -89,6 +92,15 @@
                     }}<br />
                     <i class="fa-solid fa-tag"></i> £{{ lesson.price }}<br />
                     <i class="fa-solid fa-users"></i> Spaces: {{ lesson.space }}
+                    <div class="d-grid mt-auto">
+                      <button
+                        class="btn btn-sm btn-success"
+                        :disabled="lesson.space === 0"
+                        @click="addToCart(lesson)"
+                      >
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                      </button>
+                    </div>
                   </small>
                 </p>
               </div>
