@@ -101,6 +101,24 @@
               </div>
             </div>
           </div>
+          <!-- checkout -->
+          <div class="mt-4 p-3 border rounded bg-light">
+            <h5>Checkout</h5>
+            <div class="row g-2">
+              <div class="col-md-6">
+                <input class="form-control form-control-sm" placeholder="Name (letters only)" v-model.trim="custName">
+              </div>
+              <div class="col-md-6">
+                <input class="form-control form-control-sm" placeholder="Phone (numbers only)" v-model.trim="custPhone">
+              </div>
+            </div>
+            <button class="btn btn-sm btn-primary mt-2" :disabled="!validForm" @click="checkout">
+              Submit Order
+            </button>
+          </div>
+        </div>
+        <div v-if="orderMsg" class="alert alert-success alert-dismissible fade show d-block mt-2">
+          {{ orderMsg }}
         </div>
       </div>
 

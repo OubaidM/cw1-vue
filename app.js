@@ -8,8 +8,17 @@ createApp({
       sortBy: 'topic',
       ascending: true,
       cart: [],
-      currentPage: 'lessons'
+      currentPage: 'lessons',
+      custName: '',
+      custPhone: '',
+      orderMsg: '',
     };
+  },
+  computed: {
+    validForm() {
+      return /^[A-Za-z\s]+$/.test(this.custName) &&   // letters only
+        /^[0-9]+$/.test(this.custPhone);         // digits only
+    }
   },
   methods: {
     setSort(field) {
@@ -25,25 +34,47 @@ createApp({
       });
     },
     addToCart(lesson) {
-    if (lesson.space <= 0) return;
-    // 1. decrease local copy immediately (UX)
-    lesson.space--;
-    // 2. push into cart
-    this.cart.push({ ...lesson });
-  },
+      if (lesson.space <= 0) return;
+      lesson.space--;
+      this.cart.push({ ...lesson });
+    },
 
     switchPage(page) {
-    this.currentPage = page;
-  },
+      this.currentPage = page;
+    },
 
-  removeFromCart(index, lesson) {
-  // 1. put space back in the master list
-  const original = this.lessons.find(l => l._id === lesson._id);
-  if (original) original.space++;
-  // 2. remove from cart
-  this.cart.splice(index, 1);
-}
-},
+    removeFromCart(index, lesson) {
+      // 1. put space back in the master list
+      const original = this.lessons.find(l => l._id === lesson._id);
+      if (original) { original.space++; }
+      // 2. remove from cart
+      this.cart.splice(index, 1);
+    },
+
+    async checkout() {
+      if (!this.validForm) return;
+      const order = {
+        name: this.custName,
+        phone: this.custPhone,
+        lessonIDs: this.cart.map(i => i._id),
+        space: this.cart.length
+      };
+      await fetch(`${this.apiUrl}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order)
+      });
+      this.orderMsg = 'Order submitted, thank you! Returning to Store page...';
+      setTimeout(() => {
+        this.orderMsg = '';
+        this.$nextTick(() => { this.currentPage = 'lessons'; });
+      }, 3500);
+      // reset
+      this.cart = [];
+      this.custName = '';
+      this.custPhone = '';
+    }
+  },
 
   async mounted() {
     const res = await fetch(`${this.apiUrl}/lessons`);
