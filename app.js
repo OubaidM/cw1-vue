@@ -12,6 +12,8 @@ createApp({
       custName: '',
       custPhone: '',
       orderMsg: '',
+      searchText: '',
+      searchResults: []
     };
   },
   computed: {
@@ -64,6 +66,14 @@ createApp({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(order)
       });
+      // decrement spaces in DB
+      for (const item of this.cart) {
+        await fetch(`${this.apiUrl}/lessons/${item._id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ space: item.space })   // new value
+        });
+      }
       this.orderMsg = 'Order submitted, thank you! Returning to Store page...';
       setTimeout(() => {
         this.orderMsg = '';
@@ -73,7 +83,17 @@ createApp({
       this.cart = [];
       this.custName = '';
       this.custPhone = '';
+    },
+
+    async onSearch() {
+      if (!this.searchText) {          // empty box --> show all
+        this.searchResults = [];
+        return;
+      }
+      const res = await fetch(`${this.apiUrl}/search?q=${encodeURIComponent(this.searchText)}`);
+      this.searchResults = await res.json();
     }
+
   },
 
   async mounted() {
