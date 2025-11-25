@@ -7,7 +7,8 @@ createApp({
       lessons: [],
       sortBy: 'topic',
       ascending: true,
-      cart: []
+      cart: [],
+      currentPage: 'lessons'
     };
   },
   methods: {
@@ -29,7 +30,19 @@ createApp({
     lesson.space--;
     // 2. push into cart
     this.cart.push({ ...lesson });
-  }
+  },
+
+    switchPage(page) {
+    this.currentPage = page;
+  },
+
+  removeFromCart(index, lesson) {
+  // 1. put space back in the master list
+  const original = this.lessons.find(l => l._id === lesson._id);
+  if (original) original.space++;
+  // 2. remove from cart
+  this.cart.splice(index, 1);
+}
 },
 
   async mounted() {
